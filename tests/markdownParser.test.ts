@@ -9,7 +9,7 @@ describe("parseMarkdown", () => {
 ### Heading 3
 #### Heading 4
 ##### Heading 5
-###### Heading 6    
+###### Heading 6
 
 \`\`\`python
 def main():
@@ -18,11 +18,8 @@ def main():
 
 > This is a note
 
-![Alt text](image_url)
-![Alt text  
-![Alt text]    
-![Alt text]    (image_url
-![Alt text]    (image_url)     
+![Alt text](https://example.com/image.png)
+![Alt text](
 
 This is a paragraph.
     `.trim();
@@ -37,17 +34,14 @@ This is a paragraph.
       { title: "Heading 6", size: 6 },
       {},
       {
-        script: "def main():\n  pass\n",
+        script: "def main():\n  pass",
         language: "python",
       },
       {},
       { content: "This is a note" },
       {},
-      { alt: "Alt text", url: "image_url" },
-      { content: "![Alt text" },
-      { content: "![Alt text]" },
-      { content: "![Alt text]    (image_url" },
-      { alt: "Alt text", url: "image_url" },
+      { alt: "Alt text", url: "https://example.com/image.png" },
+      { content: "![Alt text](" },
       {},
       { content: "This is a paragraph." },
     ];

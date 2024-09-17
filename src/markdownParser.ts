@@ -21,107 +21,49 @@ export const parseMarkdown = (content: string): Block[] => {
   const blocks: Block[] = [];
 
   for (let i = 0; i < lines.length; i++) {
-    let line = lines[i].trim();
+    const line = lines[i].trim();
 
-    if (line == "") {
-      blocks.push({});
+    if (line === "") {
+      blocks.push({} as Block);
       continue;
     }
 
-    if (line.startsWith("######")) {
-      blocks.push({ title: line.slice(6).trim(), size: 6 });
-      continue;
-    }
-
-    if (line.startsWith("#####")) {
-      blocks.push({ title: line.slice(5).trim(), size: 5 });
-      continue;
-    }
-
-    if (line.startsWith("####")) {
-      blocks.push({ title: line.slice(4).trim(), size: 4 });
-      continue;
-    }
-
-    if (line.startsWith("###")) {
-      blocks.push({ title: line.slice(3).trim(), size: 3 });
-      continue;
-    }
-
-    if (line.startsWith("##")) {
-      blocks.push({ title: line.slice(2).trim(), size: 2 });
-      continue;
-    }
-
-    if (line.startsWith("#")) {
-      blocks.push({ title: line.slice(1).trim(), size: 1 });
+    const headingMatch = line.match(/^(#{1,6})\s*(.*)/);
+    if (headingMatch) {
+      const size = headingMatch[1].length;
+      const title = headingMatch[2].trim();
+      blocks.push({ title, size } as Heading);
       continue;
     }
 
     if (line.startsWith("```")) {
-      let language = line.slice(3).trim();
+      const language = line.slice(3).trim();
       let script = "";
+      i++;
 
-      let j = i + 1;
-      while (!lines[j].trim().startsWith("```")) {
-        script += lines[j] + "\n";
-        j++;
+      while (i < lines.length && !lines[i].startsWith("```")) {
+        script += lines[i] + "\n";
+        i++;
       }
 
-      i = j;
-
-      blocks.push({ script: script, language: language });
+      blocks.push({ script: script.trim(), language } as Code);
       continue;
     }
 
-    if (line.startsWith("![")) {
-      let alt = "";
-      let url = "";
-
-      let max = line.length;
-      let j = 2;
-
-      while (line[j] != "]" && j < max) {
-        alt += line[j];
-        j++;
-      }
-
-      if (j == max) {
-        blocks.push({ content: line });
-        continue;
-      }
-
-      while (line[j] != "(" && j < max) {
-        j++;
-      }
-
-      if (j == max) {
-        blocks.push({ content: line });
-        continue;
-      }
-
-      j++;
-
-      while (line[j] != ")" && j < max) {
-        url += line[j];
-        j++;
-      }
-
-      if (j == max) {
-        blocks.push({ content: line });
-        continue;
-      }
-
-      blocks.push({ alt: alt, url: url });
+    const imageMatch = line.match(/!\[(.+)\]\((.+)\)/);
+    if (imageMatch) {
+      const alt = imageMatch[1].trim();
+      const url = imageMatch[2].trim();
+      blocks.push({ alt, url } as Image);
       continue;
     }
 
     if (line.startsWith(">")) {
-      blocks.push({ content: line.slice(1).trim() });
+      blocks.push({ content: line.slice(1).trim() } as Note);
       continue;
     }
 
-    blocks.push({ content: line.slice(0).trim() });
+    blocks.push({ content: line } as Paragraph);
   }
 
   return blocks;
