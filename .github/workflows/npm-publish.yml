@@ -3,9 +3,9 @@
 
 name: release-npm
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types:
+      - created 
 
 jobs:
   build:
