@@ -1,4 +1,13 @@
-import { parseMarkdown, Block } from "../src/markdownParser";
+import {
+  parseMarkdown,
+  Block,
+  BlockType,
+  Heading,
+  Code,
+  Note,
+  Image,
+  Paragraph,
+} from "../src/markdownParser";
 
 describe("parseMarkdown", () => {
   it("should correctly parse markdown into blocks", () => {
@@ -25,25 +34,33 @@ This is a paragraph.
     `.trim();
 
     const expectedBlocks: Block[] = [
-      { title: "Heading 1", size: 1 },
-      { title: "Heading 1", size: 1 },
-      { title: "Heading 2", size: 2 },
-      { title: "Heading 3", size: 3 },
-      { title: "Heading 4", size: 4 },
-      { title: "Heading 5", size: 5 },
-      { title: "Heading 6", size: 6 },
-      {},
+      { type: BlockType.Heading, title: "Heading 1", size: 1 } as Heading,
+      { type: BlockType.Heading, title: "Heading 1", size: 1 } as Heading,
+      { type: BlockType.Heading, title: "Heading 2", size: 2 } as Heading,
+      { type: BlockType.Heading, title: "Heading 3", size: 3 } as Heading,
+      { type: BlockType.Heading, title: "Heading 4", size: 4 } as Heading,
+      { type: BlockType.Heading, title: "Heading 5", size: 5 } as Heading,
+      { type: BlockType.Heading, title: "Heading 6", size: 6 } as Heading,
+      { type: BlockType.Empty },
       {
+        type: BlockType.Code,
         script: "def main():\n  pass",
         language: "python",
-      },
-      {},
-      { content: "This is a note" },
-      {},
-      { alt: "Alt text", url: "https://example.com/image.png" },
-      { content: "![Alt text](" },
-      {},
-      { content: "This is a paragraph." },
+      } as Code,
+      { type: BlockType.Empty },
+      { type: BlockType.Note, content: "This is a note" } as Note,
+      { type: BlockType.Empty },
+      {
+        type: BlockType.Image,
+        alt: "Alt text",
+        url: "https://example.com/image.png",
+      } as Image,
+      { type: BlockType.Paragraph, content: "![Alt text](" } as Paragraph,
+      { type: BlockType.Empty },
+      {
+        type: BlockType.Paragraph,
+        content: "This is a paragraph.",
+      } as Paragraph,
     ];
 
     const result = parseMarkdown(markdown);
