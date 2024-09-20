@@ -7,7 +7,7 @@ import {
   Note,
   Image,
   Paragraph,
-} from "../src/markdownParser";
+} from "../src/index";
 
 describe("parseMarkdown", () => {
   it("should correctly parse markdown into blocks", () => {
