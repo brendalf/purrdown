@@ -9,9 +9,12 @@
     "test/watch": "npx jest --watch",
     "format": "npx prettier . -w"
   },
-  "keywords": [],
+  "keywords": [
+    "markdown",
+    "parser"
+  ],
   "author": "brendalf <brendalf@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "description": "",
   "devDependencies": {
     "@types/jest": "^29.5.13",
@@ -20,5 +23,12 @@
     "prettier": "^3.3.3",
     "ts-jest": "^29.2.5",
     "typescript": "^5.6.2"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   }
 }
